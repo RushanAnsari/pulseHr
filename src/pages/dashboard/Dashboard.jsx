@@ -41,6 +41,7 @@ function Dashboard() {
         </div>
         <div className="col-span-12 xl:col-span-4">
             <DepartmentChart/>
+            
         </div>
       </div>
     </DashboardLayout>

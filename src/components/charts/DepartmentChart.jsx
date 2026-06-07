@@ -22,7 +22,9 @@ const COLORS = [
 
 function DepartmentChart() {
     return (
-        <div className="bg-slate-900 border border-slate-800 rounded-2xl p-6 h-[350px]">
+        <div className="bg-slate-900 border border-slate-800 rounded-2xl p-6 h-[350px] hover:border-emerald-500/20
+transition-all
+duration-300">
             <h3 className="text-white text-lg font-semibold mb-6">
                 Departments
             </h3>

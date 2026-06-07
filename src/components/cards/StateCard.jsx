@@ -2,7 +2,8 @@ function StateCard({
     title, value, change, icon,
 }) {
     return (
-        <div className="bg-slate-900 border border-slate-800 rounded-2xl p-5 hover:border-emerald-500/30 transition-all"
+        <div className="bg-slate-900 border border-slate-800 rounded-2xl p-5 hover:border-emerald-500/30 transition-all hover:shadow-xl
+hover:shadow-emerald-500/10 hover:-translate-y-1"
         >
             <div className="flex items-center justify-between">
                 <div>
