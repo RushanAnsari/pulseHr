@@ -2,6 +2,7 @@ import DashboardLayout from "../../layouts/DashboardLayout";
 import StateCard from "../../components/cards/StateCard";
 import AttendanceChart from "../../components/charts/AttendanceChart";
 import DepartmentChart from "../../components/charts/DepartmentChart";
+import RecentEmployees from "../../components/tables/RecentEmployees";
 import { Users, CalendarCheck, Wallet, UserPlus } from "lucide-react";
 function Dashboard() {
   return (
@@ -41,9 +42,10 @@ function Dashboard() {
         </div>
         <div className="col-span-12 xl:col-span-4">
             <DepartmentChart/>
-            
+
         </div>
       </div>
+      <RecentEmployees/>
     </DashboardLayout>
   );
 }

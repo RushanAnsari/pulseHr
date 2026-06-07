@@ -20,7 +20,7 @@ const menuItems = [
 
 function Sidebar() {
   return (
-    <aside className="w-[280px] bg-slate-900 border-r border-slate-800 h-screen flex flex-col">
+    <aside className="w-[280px] bg-slate-900 border-r border-slate-800 min-h-screen flex flex-col sticky top-0">
       {/* Logo */}
       <div className="h-20 flex items-center px-6 border-b border-slate-800">
         <h1 className="text-2xl font-bold text-emerald-500">
