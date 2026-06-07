@@ -1,5 +1,7 @@
-import Dashboard from "./pages/dashboard/Dashboard";
-function App(){
-  return <Dashboard/>;
+import Employees from "./pages/employees/Employees";
+
+function App() {
+  return <Employees />;
 }
+
 export default App;
