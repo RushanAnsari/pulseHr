@@ -1,5 +1,7 @@
 import DashboardLayout from "../../layouts/DashboardLayout";
 import StateCard from "../../components/cards/StateCard";
+import AttendanceChart from "../../components/charts/AttendanceChart";
+import DepartmentChart from "../../components/charts/DepartmentChart";
 import { Users, CalendarCheck, Wallet, UserPlus } from "lucide-react";
 function Dashboard() {
   return (
@@ -31,6 +33,15 @@ function Dashboard() {
           change="+5 this week"
           icon={<UserPlus size={26} />}
         />
+      </div>
+
+      <div className="grid grid-cols-12 gap-6 mt-6">
+        <div className="col-span-12 xl:col-span-8">
+            <AttendanceChart/>
+        </div>
+        <div className="col-span-12 xl:col-span-4">
+            <DepartmentChart/>
+        </div>
       </div>
     </DashboardLayout>
   );
