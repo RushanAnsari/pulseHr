@@ -1,6 +1,6 @@
 import { Search, Plus } from "lucide-react";
 
-function EmployeeHeader(){
+function EmployeeHeader({onAddEmployee}){
     return (
         <>
             <div className="mb-8">
@@ -80,6 +80,7 @@ function EmployeeHeader(){
           </select>
         </div>
         <button
+          onClick={onAddEmployee}
           className="
             flex
             items-center
