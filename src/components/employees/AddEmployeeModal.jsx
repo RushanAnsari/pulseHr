@@ -1,7 +1,50 @@
+import { useState } from "react";
 import { X } from "lucide-react";
 
-function AddEmployeeModal({ isOpen, onClose }) {
+function AddEmployeeModal({
+  isOpen,
+  onClose,
+  onSave,
+}) {
+  const [formData, setFormData] =
+    useState({
+      name: "",
+      email: "",
+      phone: "",
+      role: "",
+      department: "Engineering",
+      status: "Active",
+    });
+
   if (!isOpen) return null;
+
+  const handleChange = (e) => {
+    setFormData({
+      ...formData,
+      [e.target.name]: e.target.value,
+    });
+  };
+
+  const handleSave = () => {
+    if (
+      !formData.name.trim() ||
+      !formData.email.trim()
+    )
+      return;
+
+    onSave(formData);
+
+    setFormData({
+      name: "",
+      email: "",
+      phone: "",
+      role: "",
+      department: "Engineering",
+      status: "Active",
+    });
+
+    onClose();
+  };
 
   return (
     <div
@@ -28,8 +71,6 @@ function AddEmployeeModal({ isOpen, onClose }) {
           overflow-hidden
         "
       >
-        {/* Header */}
-
         <div
           className="
             flex
@@ -56,13 +97,13 @@ function AddEmployeeModal({ isOpen, onClose }) {
           </button>
         </div>
 
-        {/* Body */}
-
         <div className="p-6">
           <div className="grid md:grid-cols-2 gap-5">
-
             <input
               type="text"
+              name="name"
+              value={formData.name}
+              onChange={handleChange}
               placeholder="Full Name"
               className="
                 bg-slate-800
@@ -79,6 +120,9 @@ function AddEmployeeModal({ isOpen, onClose }) {
 
             <input
               type="email"
+              name="email"
+              value={formData.email}
+              onChange={handleChange}
               placeholder="Email Address"
               className="
                 bg-slate-800
@@ -95,6 +139,9 @@ function AddEmployeeModal({ isOpen, onClose }) {
 
             <input
               type="text"
+              name="phone"
+              value={formData.phone}
+              onChange={handleChange}
               placeholder="Phone Number"
               className="
                 bg-slate-800
@@ -111,6 +158,9 @@ function AddEmployeeModal({ isOpen, onClose }) {
 
             <input
               type="text"
+              name="role"
+              value={formData.role}
+              onChange={handleChange}
               placeholder="Role"
               className="
                 bg-slate-800
@@ -126,6 +176,9 @@ function AddEmployeeModal({ isOpen, onClose }) {
             />
 
             <select
+              name="department"
+              value={formData.department}
+              onChange={handleChange}
               className="
                 bg-slate-800
                 border
@@ -134,7 +187,6 @@ function AddEmployeeModal({ isOpen, onClose }) {
                 px-4
                 py-3
                 text-white
-                outline-none
               "
             >
               <option>Engineering</option>
@@ -144,6 +196,9 @@ function AddEmployeeModal({ isOpen, onClose }) {
             </select>
 
             <select
+              name="status"
+              value={formData.status}
+              onChange={handleChange}
               className="
                 bg-slate-800
                 border
@@ -152,17 +207,13 @@ function AddEmployeeModal({ isOpen, onClose }) {
                 px-4
                 py-3
                 text-white
-                outline-none
               "
             >
               <option>Active</option>
               <option>On Leave</option>
             </select>
-
           </div>
         </div>
-
-        {/* Footer */}
 
         <div
           className="
@@ -190,6 +241,7 @@ function AddEmployeeModal({ isOpen, onClose }) {
           </button>
 
           <button
+            onClick={handleSave}
             className="
               px-5
               py-3
