@@ -1,8 +1,9 @@
-import { Trash2 } from "lucide-react";
+import { Trash2, Pencil } from "lucide-react";
 
 function EmployeeTable({
   employees,
   onDelete,
+  onEdit,
 }) {
   return (
     <div className="bg-slate-900 border border-slate-800 rounded-2xl p-6">
@@ -103,6 +104,12 @@ function EmployeeTable({
                 </td>
 
                 <td>
+                  <div className="flex gap-3">
+                    <button onClick={() => onEdit(employee)}
+                      className="text-emerald-400 hover:text-emerald-300"
+                      >
+                        <Pencil size={18}/>
+                      </button>
                   <button
                     onClick={() =>
                       onDelete(employee.id)
@@ -115,6 +122,7 @@ function EmployeeTable({
                   >
                     <Trash2 size={18} />
                   </button>
+                  </div>
                 </td>
               </tr>
             ))}

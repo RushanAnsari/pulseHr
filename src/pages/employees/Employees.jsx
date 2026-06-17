@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
 import DashboardLayout from "../../layouts/DashboardLayout";
 import EmployeeHeader from "../../components/employees/EmployeeHeader";
@@ -7,8 +7,9 @@ import AddEmployeeModal from "../../components/employees/AddEmployeeModal";
 
 function Employees() {
   const [isModalOpen, setIsModalOpen] = useState(false);
-
-  const [employees, setEmployees] = useState([
+  const [searchTerm, setSearchTerm] = useState("");
+  const [editingEmployee, setEditingEmployee] = useState(null);
+  const defaultEmployees = [
     {
       id: 1,
       name: "Amit Sharma",
@@ -33,7 +34,16 @@ function Employees() {
       role: "Accountant",
       status: "On Leave",
     },
-  ]);
+  ];
+  const [employees, setEmployees] = useState(() => {
+    const savedEmployees = localStorage.getItem("pulsehr-employees");
+
+    return savedEmployees ? JSON.parse(savedEmployees) : defaultEmployees;
+  });
+
+  useEffect(() => {
+    localStorage.setItem("pulsehr-employees", JSON.stringify(employees));
+  }, [employees]);
 
   const addEmployee = (employee) => {
     setEmployees((prev) => [
@@ -45,27 +55,59 @@ function Employees() {
     ]);
   };
 
+  const [departmentFilter, setDepartmentFilter] = useState("All Departments");
+  const [statusFilter, setStatusFilter] = useState("All Status");
   const deleteEmployee = (id) => {
+    setEmployees((prev) => prev.filter((emp) => emp.id !== id));
+  };
+
+  const updateEmployee = (updatedEmployee) => {
     setEmployees((prev) =>
-      prev.filter((emp) => emp.id !== id)
+      prev.map((emp) =>
+        emp.id === updatedEmployee.id ? updatedEmployee : emp,
+      ),
     );
   };
+  const filteredEmployees = employees.filter((employee) => {
+    const matchesSearch = employee.name
+      .toLowerCase()
+      .includes(searchTerm.toLowerCase());
+
+    const matchesDepartment =
+      departmentFilter === "All Departments" ||
+      employee.department === departmentFilter;
+
+    const matchesStatus =
+      statusFilter === "All Status" || employee.status === statusFilter;
+
+    return matchesSearch && matchesDepartment && matchesStatus;
+  });
 
   return (
     <DashboardLayout>
       <EmployeeHeader
         onAddEmployee={() => setIsModalOpen(true)}
+        searchTerm={searchTerm}
+        setSearchTerm={setSearchTerm}
+        departmentFilter={departmentFilter}
+        setDepartmentFilter={setDepartmentFilter}
+        statusFilter={statusFilter}
+        setStatusFilter={setStatusFilter}
       />
 
-      <EmployeeTable
-        employees={employees}
-        onDelete={deleteEmployee}
-      />
+      <EmployeeTable employees={filteredEmployees} onDelete={deleteEmployee}
+      onEdit={setEditingEmployee} />
 
       <AddEmployeeModal
-        isOpen={isModalOpen}
-        onClose={() => setIsModalOpen(false)}
-        onSave={addEmployee}
+        isOpen={isModalOpen || editingEmployee !== null}
+        onClose={() => {
+          setIsModalOpen(false);
+          setEditingEmployee(null);
+        }}
+        onSave={
+          editingEmployee ? updateEmployee : addEmployee
+        }
+        editingEmployee={editingEmployee}
       />
     </DashboardLayout>
   );

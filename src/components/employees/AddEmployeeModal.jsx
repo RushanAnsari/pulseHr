@@ -1,20 +1,30 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { X } from "lucide-react";
 
-function AddEmployeeModal({
-  isOpen,
-  onClose,
-  onSave,
-}) {
-  const [formData, setFormData] =
-    useState({
-      name: "",
-      email: "",
-      phone: "",
-      role: "",
-      department: "Engineering",
-      status: "Active",
-    });
+function AddEmployeeModal({ isOpen, onClose, onSave, editingEmployee }) {
+  const [formData, setFormData] = useState({
+    name: "",
+    email: "",
+    phone: "",
+    role: "",
+    department: "Engineering",
+    status: "Active",
+  });
+
+  useEffect(() => {
+    if (editingEmployee) {
+      setFormData(editingEmployee);
+    } else {
+      setFormData({
+        name: "",
+        email: "",
+        phone: "",
+        role: "",
+        department: "Engineering",
+        status: "Active",
+      });
+    }
+  }, [editingEmployee]);
 
   if (!isOpen) return null;
 
@@ -26,14 +36,16 @@ function AddEmployeeModal({
   };
 
   const handleSave = () => {
-    if (
-      !formData.name.trim() ||
-      !formData.email.trim()
-    )
-      return;
+    if (!formData.name.trim() || !formData.email.trim()) return;
 
-    onSave(formData);
-
+    if (editingEmployee) {
+      onSave({
+        ...formData,
+        id: editingEmployee.id,
+      });
+    } else {
+      onSave(formData);
+    }
     setFormData({
       name: "",
       email: "",
@@ -83,7 +95,7 @@ function AddEmployeeModal({
           "
         >
           <h2 className="text-2xl font-bold text-white">
-            Add Employee
+            {editingEmployee ? "Edit Employee" : "Add Employee"}
           </h2>
 
           <button
@@ -252,7 +264,7 @@ function AddEmployeeModal({
               hover:bg-emerald-400
             "
           >
-            Save Employee
+            {editingEmployee ? "Update Employee" : "Save Employee"}
           </button>
         </div>
       </div>

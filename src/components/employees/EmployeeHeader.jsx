@@ -1,6 +1,6 @@
 import { Search, Plus } from "lucide-react";
 
-function EmployeeHeader({onAddEmployee}){
+function EmployeeHeader({onAddEmployee, searchTerm, setSearchTerm, departmentFilter, setDepartmentFilter, statusFilter, setStatusFilter, }){
     return (
         <>
             <div className="mb-8">
@@ -26,6 +26,8 @@ function EmployeeHeader({onAddEmployee}){
             <input
               type="text"
               placeholder="Search employees..."
+              value={searchTerm}
+              onChange={(e) => setSearchTerm(e.target.value)}
               className="
                 w-full
                 bg-slate-900
@@ -44,6 +46,10 @@ function EmployeeHeader({onAddEmployee}){
           {/* Department */}
 
           <select
+            value={departmentFilter}
+            onChange={(e) => setDepartmentFilter(
+              e.target.value
+            )}
             className="
               bg-slate-900
               border
@@ -64,6 +70,8 @@ function EmployeeHeader({onAddEmployee}){
           {/* Status */}
 
           <select
+            value={statusFilter}
+            onChange={(e) => setStatusFilter(e.target.value)}
             className="
               bg-slate-900
               border
