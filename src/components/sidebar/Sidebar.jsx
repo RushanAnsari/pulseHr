@@ -1,3 +1,4 @@
+
 import {
   LayoutDashboard,
   Users,
@@ -7,15 +8,43 @@ import {
   Briefcase,
   Settings,
 } from "lucide-react";
-
+import { NavLink } from "react-router-dom";
 const menuItems = [
-  { icon: LayoutDashboard, label: "Dashboard" },
-  { icon: Users, label: "Employees" },
-  { icon: CalendarCheck, label: "Attendance" },
-  { icon: CalendarDays, label: "Leave" },
-  { icon: Wallet, label: "Payroll" },
-  { icon: Briefcase, label: "Recruitment" },
-  { icon: Settings, label: "Settings" },
+  {
+    icon: LayoutDashboard,
+    label: "Dashboard",
+    path: "/dashboard",
+  },
+  {
+    icon: Users,
+    label: "Employees",
+    path: "/employees",
+  },
+  {
+    icon: CalendarCheck,
+    label: "Attendance",
+    path: "/attendance",
+  },
+  {
+    icon: CalendarDays,
+    label: "Leave",
+    path: "/leave",
+  },
+  {
+    icon: Wallet,
+    label: "Payroll",
+    path: "/payroll",
+  },
+  {
+    icon: Briefcase,
+    label: "Recruitment",
+    path: "/recruitment",
+  },
+  {
+    icon: Settings,
+    label: "Settings",
+    path: "/settings",
+  },
 ];
 
 function Sidebar() {
@@ -36,24 +65,30 @@ function Sidebar() {
 
             return (
               <li key={item.label}>
-                <button
-                  className="
-                    w-full
-                    flex
-                    items-center
-                    gap-3
-                    px-4
-                    py-3
-                    rounded-xl
-                    text-slate-300
-                    hover:bg-slate-800
-                    hover:text-white
-                    transition
-                  "
-                >
-                  <Icon size={20} />
-                  <span>{item.label}</span>
-                </button>
+                <NavLink
+  to={item.path}
+  className={({ isActive }) =>
+    `
+    w-full
+    flex
+    items-center
+    gap-3
+    px-4
+    py-3
+    rounded-xl
+    transition
+
+    ${
+      isActive
+        ? "bg-emerald-500/15 text-emerald-400 border border-emerald-500/20"
+        : "text-slate-300 hover:bg-slate-800 hover:text-white"
+    }
+    `
+  }
+>
+  <Icon size={20} />
+  <span>{item.label}</span>
+</NavLink>
               </li>
             );
           })}
