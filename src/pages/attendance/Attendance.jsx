@@ -1,6 +1,11 @@
 import DashboardLayout from "../../layouts/DashboardLayout";
-
+import MarkAttendanceModal from "../../components/attendance/MarkAttendanceModal";
+import { useEffect, useState } from "react";
+import { Trash2 } from "lucide-react";
 function Attendance() {
+  const [isModalOpen, setIsModalOpen] = useState(false);
+
+  
     const attendanceStats = [
   {
     title: "Present Today",
@@ -23,6 +28,70 @@ function Attendance() {
     change: "+1.5%",
   },
 ];
+const attendanceData = [
+    {
+      id: 1,
+      employee: "Amit Sharma",
+      department: "Engineering",
+      date: "18 Jun 2026",
+      status: "Present",
+    },
+    {
+      id: 2,
+      employee: "Priya Singh",
+      department: "HR",
+      date: "18 Jun 2026",
+      status: "Absent",
+    },
+    {
+      id: 3,
+      employee: "Rahul Verma",
+      department: "Finance",
+      date: "18 Jun 2026",
+      status: "Leave",
+    },
+    {
+      id: 4,
+      employee: "Neha Gupta",
+      department: "Marketing",
+      date: "18 Jun 2026",
+      status: "Half Day",
+    },
+  ];
+
+  const [attendanceRecords, setAttendanceRecords] = useState(() => {
+    try{
+    const saved = localStorage.getItem("attendanceRecords");
+    return saved ? JSON.parse(saved) : attendanceData;
+  } catch (error) {
+    return attendanceData;
+  }
+  });
+
+  useEffect(() => {
+    localStorage.setItem(
+      "attendanceRecords", JSON.stringify(attendanceRecords)
+    );
+  }, [attendanceRecords]);
+
+  const addAttendance = (
+    newAttendance
+  ) => {
+    setAttendanceRecords(
+      (prev) => [...prev, {
+        id: Date.now(),
+        ...newAttendance,
+      },]
+    );
+  };
+
+  const deleteAttendance = (
+    id
+  ) => {
+    setAttendanceRecords(
+      (prev) => prev.filter((record) => record.id !== id)
+    );
+  };
     return (
         <DashboardLayout>
             <h1 className="text-5xl font-bold text-white">Attendance</h1>
@@ -60,6 +129,85 @@ function Attendance() {
   ))}
 
 </div>
+
+{/* Attendance Table */}
+<div className="mt-8 bg-slate-900/80 border border-slate-800 rounded-3xl p-6">
+  <div className="flex items-center justify-between mb-6">
+    <h2 className="text-2xl font-semibold text-white">
+      Attendance Records
+    </h2>
+    <button onClick={() => setIsModalOpen(true)} className="px-5 py-2 rounded-xl bg-emerald-500 text-black font-semibold">Mark Attendance</button>
+  </div>
+
+  <div className="overflow-x-auto">
+    <table className="w-full">
+      <thead>
+        <tr className="text-left border-b border-slate-800">
+          <th className="pb-4 text-slate-400">Employee</th>
+          <th className="pb-4 text-slate-400">Department</th>
+          <th className="pb-4 text-slate-400">Date</th>
+          <th className="pb-4 text-slate-400">Status</th>
+          <th className="pb-4 text-slate-400">Action</th>
+        </tr>
+      </thead>
+
+      <tbody>
+              {attendanceRecords.map((item) => (
+                <tr
+                  key={item.id}
+                  className="
+                    border-b
+                    border-slate-800/50
+                  "
+                >
+                  <td className="py-5 text-white">
+                    {item.employee}
+                  </td>
+
+                  <td className="text-slate-300">
+                    {item.department}
+                  </td>
+
+                  <td className="text-slate-300">
+                    {item.date}
+                  </td>
+
+                  <td>
+                    <span
+                      className={`
+                        px-3
+                        py-1
+                        rounded-full
+                        text-sm
+                        font-medium
+
+                        ${
+                          item.status === "Present"
+                            ? "bg-emerald-500/20 text-emerald-400"
+                            : item.status === "Absent"
+                            ? "bg-red-500/20 text-red-400"
+                            : item.status === "Leave"
+                            ? "bg-amber-500/20 text-amber-400"
+                            : "bg-cyan-500/20 text-cyan-400"
+                        }
+                      `}
+                    >
+                      {item.status}
+                    </span>
+                  </td>
+                  <td>
+                    <button onClick={() => deleteAttendance(item.id)}
+                    className="text-red-300">
+                      <Trash2 size={18}/>
+                    </button>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+    </table>
+  </div>
+</div>
+<MarkAttendanceModal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)} onSave={addAttendance}/>
         </DashboardLayout>
     );
 } 
