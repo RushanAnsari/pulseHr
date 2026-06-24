@@ -59,6 +59,12 @@ const attendanceData = [
     },
   ];
 
+  const [searchTerm, setSearchTerm] = useState("");
+
+  const [departmentFilter, setDepartmentFilter] = useState("All Departments");
+
+  const [statusFilter, setStatusFilter] = useState("All Status");
+
   const [attendanceRecords, setAttendanceRecords] = useState(() => {
     try{
     const saved = localStorage.getItem("attendanceRecords");
@@ -92,6 +98,24 @@ const attendanceData = [
       (prev) => prev.filter((record) => record.id !== id)
     );
   };
+
+  const filteredAttendance = attendanceRecords.filter((record) => {
+    const matchesSearch = record.employee
+    .toLowerCase()
+    .includes(
+      searchTerm.toLocaleLowerCase()
+    );
+
+    const matchesDepartment = departmentFilter === "All Departments" || record.department === departmentFilter;
+
+    const matchesStatus = statusFilter === "All Status" || record.status === statusFilter;
+
+    return (
+      matchesSearch &&
+      matchesDepartment &&
+      matchesStatus
+    );
+  });
     return (
         <DashboardLayout>
             <h1 className="text-5xl font-bold text-white">Attendance</h1>
@@ -130,6 +154,40 @@ const attendanceData = [
 
 </div>
 
+<div className="flex flex-col lg:flex-row gap-4 mt-8">
+  {/* Search */}
+  <input type="text"
+  placeholder="Search employee..."
+  value={searchTerm}
+  onChange={(e) => setSearchTerm(
+    e.target.value
+  )}
+  className="flex-1 bg-slate-900 border border-slate-800 rounded-xl px-4 py-3 text-white"
+  />
+
+  {/* Departments */}
+  <select value={departmentFilter} onChange={(e) => setDepartmentFilter(
+    e.target.value
+  )}
+    className="bg-slate-900 border border-slate-800 rounded-xl px-4 py-3 text-white"
+  >
+    <option>All Departments</option>
+    <option>Engineering</option>
+    <option>HR</option>
+    <option>Finance</option>
+    <option>Marketing</option>
+  </select>
+
+  {/* Status */}
+  <select value={statusFilter} onChange={(e) => setStatusFilter(e.target.value)} className="bg-slate-900 border border-slate-800 rounded-xl px-4 py-3 text-white">
+    <option>All Status</option>
+    <option>Present</option>
+    <option>Absent</option>
+    <option>Leave</option>
+    <option>Half Day</option>
+  </select>
+
+</div>
 {/* Attendance Table */}
 <div className="mt-8 bg-slate-900/80 border border-slate-800 rounded-3xl p-6">
   <div className="flex items-center justify-between mb-6">
@@ -152,7 +210,7 @@ const attendanceData = [
       </thead>
 
       <tbody>
-              {attendanceRecords.map((item) => (
+              {filteredAttendance.map((item) => (
                 <tr
                   key={item.id}
                   className="

@@ -5,6 +5,7 @@ import {
 } from "react-router-dom";
 import Employees from "./pages/employees/Employees";
 import Attendance from "./pages/attendance/Attendance";
+import Leave from "./pages/leave/Leave";
 function App() {
   return (
     <Routes>
@@ -22,6 +23,10 @@ function App() {
       <Route path="/attendance"
       element={<Attendance/>}
       />
+      <Route 
+        path="/leave"
+        element={<Leave/>}
+        />
     </Routes>
   );
 }
